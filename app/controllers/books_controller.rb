@@ -4,35 +4,38 @@ class BooksController < ApplicationController
      @list = List.new
   end
   def create
-    list = List.new(list_params)
-    if list.save
+    @list = List.new(list_params)
+    if @list.save
       redirect_to book_path(list.id), notice: 'Book was successfully created.'
     else
-      #書き込み失敗
-      render action: :new
+      @lists = List.all
+      render action: :index
     end
   end
   def index
      @lists = List.all
+     @list = List.new
   end
   def show
     @list = List.find(params[:id])
   end
+  
   def edit
     @list = List.find(params[:id])
   end
   def update
-    list = List.find(params[:id])
-    if list.update(list_params)
-      redirect_to book_path(list.id)
+    @list = List.find(params[:id])
+    if @list.update(list_params)
+      redirect_to book_path(@list.id), notice: 'Book was successfully updated.'
     else
       render action: :edit
     end
   end
+  
   def destroy
-    list = List.find(params[:id])  # データ（レコード）を1件取得
-    list.destroy  # データ（レコード）を削除
-    redirect_to books_path  # 投稿一覧画面へリダイレクト
+    list = List.find(params[:id])
+    list.destroy
+    redirect_to book_index_path, notice: 'Book was successfully destroyed.'
   end
   private
   # ストロングパラメータ

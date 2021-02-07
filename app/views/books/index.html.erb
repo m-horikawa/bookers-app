@@ -1,3 +1,9 @@
+ <% if flash[:notice] %>
+    <p id="notice">
+     <%= flash[:notice] %>
+    </p>
+<% end %>
+
 <h1>Books</h1>
 
 <table border="0">
@@ -8,7 +14,6 @@
       <th colspan="3"></th>
     </tr>
   </thead>
-
   <tbody>
     <% @lists.each do |list| %>
       <tr>
@@ -16,8 +21,26 @@
         <td><%= list.body %></td>
         <td><%= link_to "Show", book_path(list.id) %></td>
         <td><%= link_to "Edit", edit_book_path(list.id) %></td>
-        <td><%= link_to "Destroy", destroy_book_path(list.id), method: :delete, "data-confirm" => "Are you sure?" %></td>
+        <td><%= link_to "Destroy", book_path(list.id), method: :delete, "data-confirm" => "Are you sure?" %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
+
+<h2>New Book</h2>
+<!-- form_with部分 -->
+<%= form_with model: @list, url:'/books', local:true do |f| %>
+  
+  <% if @list.errors.any? %>
+  <%= @list.errors.count %>件のエラー
+  <% @list.errors.full_messages.each do |message| %>
+  <%= message %>
+  <% end %>
+  <% end %>
+
+  <h4>Title</h4>
+  <%= f.text_field :title %>
+  <h4>Body</h4>
+  <%= f.text_area :body %>
+  <%= f.submit 'Create Book' %>
+<% end %>

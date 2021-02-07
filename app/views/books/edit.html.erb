@@ -1,5 +1,14 @@
 <h1>Editing Book</h1>
-<%= form_with model:@list, url:"/books/#{@list.id}", local:true do |f| %>
+
+<%= form_with model:@list, url: book_path, local:true do |f| %>
+
+  <% if @list.errors.any? %>
+  <%= @list.errors.count %>件のエラー
+  <% @list.errors.full_messages.each do |message| %>
+  <%= message %>
+  <% end %>
+  <% end %>
+
   <h4>Title:</h4>
   <%= f.text_field :title %>
   <h4>Body:</h4>
@@ -8,4 +17,4 @@
 <% end %>
 
 <%= link_to "Show", book_path(@list.id) %>
-<%= link_to "Back", book_index_path %>
+<%= link_to "Back", books_path %>
